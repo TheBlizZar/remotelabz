@@ -1,9 +1,6 @@
 #!/bin/bash -e
 # =============================================================================
-# RemoteLabz – OpenVPN Client Certificate Generator
-# Adapted from bin/openvpn-client/make-client.sh for container use.
-# Paths point to the container's /etc/openvpn/server directory.
-# Usage: make-client.sh <login> <password> <validity_days>
+# RemoteLabz – OpenVPN Client Certificate 
 # =============================================================================
 
 KEY_COUNTRY="FR"
@@ -15,8 +12,6 @@ KEY_ALGO="rsa"
 KEY_LENGTH=4096
 KEY_CN="RemoteLabz-VPNServer"
 
-# ── Public address used in the .ovpn remote directive ─────────────────────────
-# Override at runtime:  PUBLIC_ADDRESS=1.2.3.4 make-client.sh login pass 365
 VPN_REMOTE="${PUBLIC_ADDRESS:-127.0.0.1}"
 VPN_PORT="${VPN_PORT:-1194}"
 
@@ -44,12 +39,10 @@ if [ -f "${CERT_CLIENT_DIR}/${LOGIN}.key" ]; then
     exit 2
 fi
 
-echo "🔑 Generating client certificate for: ${LOGIN}"
+echo "Generating client certificate for: ${LOGIN}"
 
-# Store credentials (mirrors original script)
 printf '%s\n%s\n' "$LOGIN" "$PASSWORD" > "${CERT_CLIENT_DIR}/${LOGIN}.txt"
 
-# Generate private key + certificate request
 openssl req \
     -out    "${CERT_CLIENT_DIR}/${LOGIN}.req" \
     -new \
@@ -58,7 +51,6 @@ openssl req \
     -keyout "${CERT_CLIENT_DIR}/${LOGIN}.key" \
     -subj   "/C=${KEY_COUNTRY}/ST=${KEY_PROVINCE}/L=${KEY_CITY}/O=${KEY_ORG}/CN=${KEY_CN}"
 
-# Sign with CA
 openssl x509 \
     -req \
     -days   "$VALIDITY" \
@@ -68,7 +60,6 @@ openssl x509 \
     -CAkey  "$CAKEY" \
     -CAcreateserial
 
-# Build .ovpn profile
 OVPN_OUT="${CERT_CLIENT_DIR}/${LOGIN}.ovpn"
 
 cat > "$OVPN_OUT" << EOF
@@ -105,5 +96,4 @@ echo "</tls-auth>"                  >> "$OVPN_OUT"
 
 chmod 600 "${CERT_CLIENT_DIR}/${LOGIN}.key" "${CERT_CLIENT_DIR}/${LOGIN}.ovpn"
 
-echo "✅ Client profile ready: ${OVPN_OUT}"
-echo "   Copy it to the client machine and import into OpenVPN."
+echo "Client profile ready: ${OVPN_OUT}"

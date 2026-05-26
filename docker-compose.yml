@@ -5,7 +5,6 @@
 
 services:
 
-  # ── Front (Apache + PHP 8.4 + Node) ──────────────────────────────────────────
   front:
     build:
       context: .
@@ -17,7 +16,6 @@ services:
       - "443:443"
     volumes:
       - ./:/opt/remotelabz
-      # Les volumes partagés pour le VPN (plus besoin du web_certs)
       - openvpn_server:/etc/openvpn/server
       - openvpn_clients:/etc/openvpn/client
     env_file:
@@ -30,11 +28,9 @@ services:
     networks:
       - remotelabz
     environment:
-      # URL propre sans encodage bizarre
       - DATABASE_URL=mysql://user:Mysql-Pa33wrd-Safe@mysql:3306/remotelabz?serverVersion=8.0
       - MESSENGER_TRANSPORT_DSN=amqp://remotelabz-amqp:password-amqp@rabbitmq:5672/%2f/messages
 
-  # ── MySQL ────────────────────────────────────────────────────────────────────
   mysql:
     image: mysql:8.0
     container_name: remotelabz-mysql
@@ -58,7 +54,6 @@ services:
       retries: 5
       start_period: 30s
 
-  # ── RabbitMQ ─────────────────────────────────────────────────────────────────
   rabbitmq:
     image: rabbitmq:3-management
     container_name: remotelabz-rabbitmq
@@ -81,7 +76,6 @@ services:
       retries: 5
       start_period: 30s
 
-  # ── OpenVPN ──────────────────────────────────────────────────────────────────
   openvpn:
     build:
       context: ./docker/openvpn
@@ -108,9 +102,6 @@ services:
     sysctls:
       net.ipv4.ip_forward: 1
 
-# =============================================================================
-# Named Volumes
-# =============================================================================
 volumes:
   mysql_data:
     name: remotelabz_mysql_data
@@ -125,9 +116,6 @@ volumes:
   openvpn_easyrsa:
     name: remotelabz_openvpn_easyrsa
 
-# =============================================================================
-# Networks
-# =============================================================================
 networks:
   remotelabz:
     name: remotelabz_network
