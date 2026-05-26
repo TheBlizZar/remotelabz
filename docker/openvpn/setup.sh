@@ -64,7 +64,7 @@ send "${PEM_PASS}\r"
 expect eof
 EXPECT_EOF
 
-    log "CA built ✅"
+    log "CA built"
 else
     warn "CA already exists — skipping"
 fi
@@ -86,7 +86,7 @@ send "${PEM_PASS}\r"
 expect eof
 EXPECT_EOF
 
-    log "Server certificate signed ✅"
+    log "Server certificate signed"
 else
     warn "Server certificate already exists — skipping"
 fi
@@ -114,7 +114,7 @@ cp dh2048.pem "${OPENVPN_DIR}/"
 chmod 600 "${OPENVPN_DIR}/"*.key "${OPENVPN_DIR}/ca.key"
 chmod 644 "${OPENVPN_DIR}/"*.crt "${OPENVPN_DIR}/ta.key" "${OPENVPN_DIR}/dh2048.pem"
 
-log "Certificates installed ✅"
+log "Certificates installed"
 
 step "4/4 — IP Forwarding & OpenVPN"
 

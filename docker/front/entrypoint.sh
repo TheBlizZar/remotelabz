@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Démarrage de l'initialisation du Front RemoteLabz..."
+echo "Démarrage de l'initialisation du Front RemoteLabz..."
 
 git config --global --add safe.directory /opt/remotelabz
 

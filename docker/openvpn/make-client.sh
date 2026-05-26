@@ -35,7 +35,7 @@ usage() {
 [ ! -d "$CERT_CLIENT_DIR" ] && mkdir -p "$CERT_CLIENT_DIR"
 
 if [ -f "${CERT_CLIENT_DIR}/${LOGIN}.key" ]; then
-    echo "❌ Client '${LOGIN}' already exists — choose another name."
+    echo "Client '${LOGIN}' already exists — choose another name."
     exit 2
 fi
 
