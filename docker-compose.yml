@@ -42,8 +42,6 @@ services:
       MYSQL_PASSWORD:      "Mysql-Pa33wrd-Safe" 
     volumes:
       - mysql_data:/var/lib/mysql
-    ports:
-      - "${MYSQL_PORT:-3306}:3306"
     networks:
       - remotelabz
     healthcheck:
